@@ -16,11 +16,10 @@ var pool =
     user: process.env.DB_USER, 
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
-    database: process.env.DB_NAME //,
-    // 3.) Add an "ssl" property to the connection pool configuration, using the serverCert const defined above
-    /*ssl: {
-      ca: serverCert
-    }*/
+    database: process.env.DB_NAME,
+    ssl: {
+      rejectUnauthorized: false  // accepte le certificat Azure sans fichier
+    }
   });
 
 // Expose the Pool object within this module
