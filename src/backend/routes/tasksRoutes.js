@@ -22,10 +22,10 @@ router.post("/", async (req, res, next) => {
     let task = req.body;
     let conn;
     try {
-        const result = await db.pool.query("insert into tasks (description) values (?)", [task.description]);
-        res.send(result);
+        const [rows] = await db.pool.query("insert into tasks (description) values (?)", [task.description]);
+        res.send(rows);
     } catch (err) {
-        throw err;
+        res.status(500).json({ error: err.message });
     } finally {
         if (conn) return conn.release();
     }

@@ -23,7 +23,8 @@ app.get("/*", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-    res.status(422).send({ error: err._message });
+    console.error(err); // pour debug
+    res.status(err.status || 500).json({ error: err.message || err });
 });
 
 // console.log that your server is up and running
