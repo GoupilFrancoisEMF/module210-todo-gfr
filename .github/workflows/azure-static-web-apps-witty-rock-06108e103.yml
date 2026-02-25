@@ -35,6 +35,7 @@ jobs:
       # - name: Vérifier la présence de index.html
       #   run: 
       - name: Lighthouse CI
+        on: push
         jobs:
           lighthouse:
             runs-on: ubuntu-latest
