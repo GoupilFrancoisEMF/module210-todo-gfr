@@ -3,13 +3,13 @@ name: Build and Push Backend Docker Image
 on:
   push:
     branches:
-      - frontend
+      - main
     paths:
-      - 'backend/**' 
+      - 'src/backend/**' 
 
 env:
   REGISTRY: ${{ secrets.ACR_LOGIN_SERVER }}
-  IMAGE_NAME: app-backend-francois
+  IMAGE_NAME: "app-backend-francois"
 
 jobs:
   build-and-push:
