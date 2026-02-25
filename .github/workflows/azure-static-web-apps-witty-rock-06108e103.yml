@@ -32,6 +32,10 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
+      # - name: Vérifier la présence de index.html
+      #   run: 
+      - name: Lighthouse CI Action
+        uses: treosh/lighthouse-ci-action@12.6.1
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
