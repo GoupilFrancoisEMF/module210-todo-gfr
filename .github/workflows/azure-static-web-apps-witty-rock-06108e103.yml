@@ -47,8 +47,8 @@ jobs:
           output_location: "." # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
-      - name: Debug - List files
-        run: ls -la
+      - name: Wait for deployment
+        run: sleep 60  # attend 30 secondes
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
