@@ -47,7 +47,7 @@ jobs:
           output_location: "." # Built app content directory - optional
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
-  Lighthouse check:
+  lighthouse_check:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
@@ -63,7 +63,7 @@ jobs:
           urls: |
             https://witty-rock-06108e103.6.azurestaticapps.net/
           configPath: ./lighthouserc.json
-  lighthouse report:
+  lighthouse_report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
