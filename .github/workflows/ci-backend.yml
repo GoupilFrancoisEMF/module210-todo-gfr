@@ -3,7 +3,7 @@ name: Build and save my Docker image to a registry
 on:
   push:
     branches:
-      - main
+      - frontend
     paths:
       - "src/backend/**"     
 
