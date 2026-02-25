@@ -34,8 +34,20 @@ jobs:
            result-encoding: string
       # - name: Vérifier la présence de index.html
       #   run: 
-      - name: Lighthouse CI Action
-        uses: treosh/lighthouse-ci-action@12.6.1
+      - name: Lighthouse CI
+        jobs:
+          lighthouse:
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@v5
+              - name: Audit URLs using Lighthouse
+                uses: treosh/lighthouse-ci-action@v12
+                with:
+                  urls: |
+                    https://witty-rock-06108e103.6.azurestaticapps.net/
+                  budgetPath: ./budget.json # test performance budgets
+                  uploadArtifacts: true # save results as an action artifacts
+                  temporaryPublicStorage: true # upload lighthouse report to the temporary storage
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
