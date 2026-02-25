@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
-       id-token: write
-       contents: read
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v3
         with:
@@ -28,12 +28,12 @@ jobs:
         uses: actions/github-script@v6
         id: idtoken
         with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
+          script: |
+            const coredemo = require('@actions/core')
+            return await coredemo.getIDToken()
+          result-encoding: string
       # - name: Vérifier la présence de index.html
-      #   run: 
+      #   run:
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -48,21 +48,30 @@ jobs:
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
   lighthouse_check:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    needs: build_and_deploy_job
     runs-on: ubuntu-latest
     name: lighthouse test
     permissions:
-       id-token: write
-       contents: read
+      id-token: write
+      contents: read
     steps:
+      - uses: actions/checkout@v5
       - name: Wait for deployment
-        run: sleep 60  # attend 30 secondes
+        run: |
+          for i in {1..12}; do
+            if curl -s -o /dev/null -w "%{http_code}" https://witty-rock-06108e103.6.azurestaticapps.net/ | grep 200; then
+              echo "Site ready!"
+              break
+            fi
+            echo "Waiting 5 seconds..."
+            sleep 5
+          done
       - name: Audit URLs using Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             https://witty-rock-06108e103.6.azurestaticapps.net/
-          configPath: lighthouserc.json
+          configPath: ./lighthouserc.json
   lighthouse_report:
     runs-on: ubuntu-latest
     steps:
@@ -78,14 +87,15 @@ jobs:
   check_for_index_file:
     runs-on: ubuntu-latest
     steps:
-        - name: Check the presence of index.html
-          run: |
-            if [ -f ./src/frontend/index.html ]; then
-              echo "File exists"
-            else
-              echo "File missing"
-              exit 
-            fi 
+      - uses: actions/checkout@v5
+      - name: Check the presence of index.html
+        run: |
+          if [ -f ./src/frontend/index.html ]; then
+            echo "File exists"
+          else
+            echo "File missing"
+            exit 1
+          fi
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
