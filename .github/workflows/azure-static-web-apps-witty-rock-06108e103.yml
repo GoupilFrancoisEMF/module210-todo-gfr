@@ -62,7 +62,7 @@ jobs:
         with:
           urls: |
             https://witty-rock-06108e103.6.azurestaticapps.net/
-          configPath: ./lighthouserc.json
+          configPath: lighthouserc.json
   lighthouse_report:
     runs-on: ubuntu-latest
     steps:
